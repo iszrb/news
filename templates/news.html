@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block container %}
+    {% block link %}
+    <style>
+        textarea {
+            border: 2px solid skyblue;
+        }
+
+        .restore {
+            background-color: #f5f5f5;
+        }
+        .col-md-4{
+            position: absolute ;
+            right: 20px;
+            width: 20%;
+
+        }
+    </style>
+{% endblock %}
+
+    <script type="text/javascript" src="/static/ckeditor/ckeditor/ckeditor.js"></script>
+    <script type="text/javascript" src="/static/ckeditor/ckeditor-init.js"></script>
+
+    <div class="container">
+        <div class="col-md-8 news">
+            <h1 class="title">{{ contents.title }}</h1>
+            <p class="info">
+                <span>阅读：{{ contents.clicked }}</span> •
+                <span>{{ contents.user_id.username }}</span> •
+                <span>{{ contents.publish_time }}</span>
+                <span class="label label-default">{{ contents.picture }}</span>
+            </p>
+            <div class="content">
+                {{ contents.content |safe }}
+            </div>
+            <hr>
+            <div class="comment">
+                <form action="/news/{{ contents.id }}" method="post">
+                    {{ form.content }}
+                    {% csrf_token %}
+                    <input type="submit" value="评论">
+                </form>
+                <hr>
+            </div>
+            <div class="show_comment">
+                {% for ct in comments %}
+                    <span>{{ ct.user_id.username }}:</span><span>({{ ct.publish_time }}) </span>
+                    <div>
+                        {{ ct.content|safe }}
+                    </div>
+                    <div class="restore">
+                        <a onclick="showRestore('{{ ct.id }}');">回复</a>
+                        <div id="restore_{{ ct.id }}" hidden>
+                            <form action="/news/{{ contents.id }}" method="post">
+                                <input hidden type="text" name="restore" value="{{ ct.id }}">
+                                <input hidden type="text" name="restore_user" value="{{ ct.user_id.id }}">
+                                <textarea name="content" cols="77" rows="4"></textarea>
+                                {% csrf_token %}
+                                <input type="submit" value="回复">
+                            </form>
+                            <div>
+                                {% for restore  in ct.res.all %}
+                                    <span>{{ restore.user_id.username }}回复{{ restore.restore_user.username }}</span>
+                                    <span>({{ restore.publish_time }}) </span>
+                                    <div>
+                                        {{ restore.content|safe }}
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <hr>
+                {% endfor %}
+            </div>
+        </div>
+  <div class="col-md-4">
+    <div class="side-bar-well">
+      <strong class="side-bar-well-title">
+        相关推荐
+      </strong>
+      <a href="#" class="news-item clearfix">
+        <div class="row">
+          <span class="col-xs-5">
+            <img src="/static/img/as.JPG" alt="">
+          </span>
+          <span class="col-xs-7">
+            <div class="news-title">hello </div>
+            <div class="news-info">
+                89次播放  ⋅ 67评论
+            </div>
+          </span>
+        </div>
+      </a>
+    </div>
+    <div class="side-bar-well">
+      <strong class="side-bar-well-title">
+        24小时热闻
+      </strong>
+      {% for hot in hot_news %}
+            <a href="/news/{{ hot.id }}" class="news-item">
+                <div class="news-title">{{ hot.title }}</div>
+                <div class="news-info">
+                    阅读量:{{ hot.clicked }} ⋅ 评论数：{{ hot.comment.all|length }}
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+  </div>
+</div>
+     <script>
+        function showRestore(id) {
+            $("#restore_" + id).toggle();
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="news_r@localhost">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="4.1">
+    <root id="1"/>
+    <schema id="2" parent="1" name="news_r">
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="3" parent="1" name="bank"/>
+    <schema id="4" parent="1" name="django"/>
+    <schema id="5" parent="1" name="file"/>
+    <schema id="6" parent="1" name="guestbook"/>
+    <schema id="7" parent="1" name="information_schema"/>
+    <schema id="8" parent="1" name="mysql"/>
+    <schema id="9" parent="1" name="news"/>
+    <schema id="10" parent="1" name="performance_schema"/>
+    <schema id="11" parent="1" name="shopping"/>
+    <schema id="12" parent="1" name="table"/>
+    <schema id="13" parent="1" name="takeaway"/>
+    <schema id="14" parent="1" name="test"/>
+    <schema id="15" parent="1" name="user"/>
+    <schema id="16" parent="1" name="zrb"/>
+  </database-model>
+</dataSource>

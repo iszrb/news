@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load pagination_tags %}
+{% block container %}
+    <div class="container">
+        <div class="col-sm-2">
+            <div class="list-group side-bar">
+                {% if type_id %}
+                    <a class="list-group-item" href="/">全部</a>
+                {% else %}
+                    <a class="list-group-item active" href="/">全部</a>
+                {% endif %}
+
+                {% for t in types|slice:"2:" %}
+                    {% if t.id == type_id %}
+                        <a class="list-group-item active" href="/?type_id={{ t.id }}">{{ t.name }}</a>
+                    {% else %}
+                        <a class="list-group-item" href="/?type_id={{ t.id }}">{{ t.name }}</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-xs-7">
+            <div class="post-list">
+                {% autopaginate content_list_all 2 %}
+                {% for i in  content_list_all %}
+                    <div class="post-list-item">
+                        <div class="col-xs-5">
+                            <img class="post-object" src="/media/{{ i.image }}">
+                        </div>
+                        <div class="col-xs-7">
+                            <a href="/news/{{ i.id }}">
+                                <div class="post-heading">{{ i.title }}</div>
+                            </a>
+                            <p class="text-muted">
+                        <span>
+                            <img class="avatar" src="/media/{{ i.user_id.image }}">
+                            {{ i.user_id.username }}
+                        </span> ⋅
+                        <span>
+                             {{ i.comment.all|length }}评论
+                        </span> ⋅
+                        <span>
+                            {{ i.publish_time }}
+                        </span>
+                             </p>
+                         </div>
+                     </div>
+                {% endfor %}
+                {% paginate %}
+            </div>
+        </div>
+    <div class="col-sm-3">
+      <form action="/" method="get">
+        <input type="search" class="form-control" placeholder="搜搜" name="search">
+      </form>
+      <div class="side-bar-well clearfix">
+        <div class="col-sm-5"><img src="/static/img/1-1.png"></div>
+        <div class="col-sm-7">
+          <p class="side-bar-well-title">
+            网上有害信息举报专区
+          </p>
+          <p>举报电话：12377</p>
+        </div>
+      </div>
+      <div class="side-bar-well">
+        <strong class="side-bar-well-title">
+          24小时热闻
+        </strong>
+          {% for hot in hot_news %}
+              <a href="/news/{{ hot.id }}" class="news-item">
+              <div class="news-title">{{ hot.title }}</div>
+              <div class="news-info">
+                  阅读量:{{ hot.clicked }} ⋅ 评论数：{{ hot.comment.all|length }}
+              </div>
+              </a>
+          {% endfor %}
+      </div>
+    </div>
+</div>
+{% endblock %}
